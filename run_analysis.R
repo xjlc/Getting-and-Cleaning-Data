@@ -58,6 +58,7 @@ nrow(test) # 2947
 dat <- merge(training, test, all=TRUE)
 nrow(dat) # 10299
 
+
 # ==============================================================================================
 # = 2. Extract only the measurements on the mean and standard deviation for each measurement.  =
 # ==============================================================================================
@@ -70,6 +71,12 @@ useCols <- c("subject", "class", "source", names(dat)[sort(c(meanCols, stdCols))
 
 dat2 <- dat[, useCols]
 
+write.table(dat2, file="test_and_training.txt", sep="\t", row.names=FALSE)
+
 # ========================================================================================================================
 # = 5. Create a second, independent tidy data set with the average of each variable for each activity and each subject.  =
 # ========================================================================================================================
+
+library(reshape2)
+md2 <- melt(dat2, id=c("subject", "class", "source"))
+mtab <- dcast(md2, subject + class ~ variable, mean)
